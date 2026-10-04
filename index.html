@@ -184,104 +184,178 @@ button {
   opacity: .6;
 }
 
+
+
 /* =========================================
-   STICKY IOS-INSPIRED LIQUID GLASS BAR
+   ASTRA — TRUE LIQUID GLASS FLOATING BAR
 ========================================= */
 
 .site-header {
   position: sticky;
   top: 0;
   z-index: 1000;
-  padding: 15px 0 0;
+  padding: 12px 0 0;
   width: 100%;
   pointer-events: none;
 }
 
 .glass-nav {
-  width: min(1060px, calc(100% - 30px));
-  min-height: 66px;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+
+  width: min(1060px, calc(100% - 28px));
+  min-height: 65px;
   margin: 0 auto;
-  padding: 8px 10px 8px 19px;
+  padding: 8px 10px 8px 20px;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  position: relative;
-  overflow: hidden;
+
+  /* Transparent liquid surface */
+  background:
+    radial-gradient(
+      ellipse at 12% 0%,
+      rgba(255,255,255,.23),
+      transparent 42%
+    ),
+    radial-gradient(
+      ellipse at 90% 100%,
+      rgba(135,174,255,.13),
+      transparent 45%
+    ),
+    linear-gradient(
+      125deg,
+      rgba(255,255,255,.105),
+      rgba(255,255,255,.018) 42%,
+      rgba(255,255,255,.075)
+    );
+
+  border: 1px solid rgba(255,255,255,.29);
+  border-radius: 25px;
+
+  /* Real background blur */
+  -webkit-backdrop-filter: blur(38px) saturate(220%) contrast(108%);
+  backdrop-filter: blur(38px) saturate(220%) contrast(108%);
+
+  /* Curved glass depth and reflective edges */
+  box-shadow:
+    0 12px 35px rgba(0,0,0,.16),
+    0 2px 10px rgba(0,0,0,.12),
+    inset 0 1.5px 1px rgba(255,255,255,.44),
+    inset 1px 0 1px rgba(255,255,255,.15),
+    inset -1px 0 1px rgba(255,255,255,.09),
+    inset 0 -2px 3px rgba(255,255,255,.055);
+
+  transform: translateZ(0);
   pointer-events: auto;
 
-  background:
-    linear-gradient(120deg,
-      rgba(255,255,255,.105),
-      rgba(255,255,255,.025) 40%,
-      rgba(140,166,255,.07)),
-    rgba(9,11,18,.55);
-
-  border: 1px solid rgba(255,255,255,.18);
-  border-radius: 23px;
-
-  backdrop-filter: blur(32px) saturate(190%);
-  -webkit-backdrop-filter: blur(32px) saturate(190%);
-
-  box-shadow:
-    0 12px 50px rgba(0,0,0,.24),
-    inset 0 1px 1px rgba(255,255,255,.18),
-    inset 0 -1px 1px rgba(255,255,255,.025);
-
-  transition: background .4s, border-color .4s, box-shadow .4s;
+  transition:
+    border-color .35s ease,
+    box-shadow .35s ease,
+    background .35s ease;
 }
 
+/* Moving glossy reflection across the glass */
 .glass-nav::before {
   content: "";
   position: absolute;
-  top: 0;
-  left: -110%;
-  height: 1px;
-  width: 70%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,.8), transparent);
-  animation: navShine 8s ease-in-out infinite;
+  z-index: -1;
   pointer-events: none;
+
+  top: -100%;
+  left: -70%;
+  width: 45%;
+  height: 300%;
+
+  transform: rotate(24deg);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,.035) 22%,
+    rgba(255,255,255,.20) 48%,
+    rgba(255,255,255,.055) 72%,
+    transparent
+  );
+
+  filter: blur(5px);
+  animation: liquidReflection 9s ease-in-out infinite;
 }
 
+/* Soft internal glow and curved highlight */
 .glass-nav::after {
   content: "";
   position: absolute;
-  width: 240px;
-  height: 80px;
-  top: -65px;
-  left: 15%;
-  background: rgba(150,190,255,.12);
-  filter: blur(30px);
-  border-radius: 50%;
+  inset: 1px;
+  z-index: -1;
   pointer-events: none;
+  border-radius: inherit;
+
+  background:
+    radial-gradient(
+      ellipse at 50% -30%,
+      rgba(255,255,255,.22),
+      transparent 55%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.055),
+      transparent 40%,
+      rgba(255,255,255,.015)
+    );
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.16),
+    inset 0 -1px 0 rgba(255,255,255,.035);
 }
 
-@keyframes navShine {
-  0%, 40% { left: -110%; }
-  75%, 100% { left: 150%; }
+@keyframes liquidReflection {
+  0%, 15% {
+    left: -70%;
+    opacity: 0;
+  }
+  25% {
+    opacity: .8;
+  }
+  55% {
+    left: 125%;
+    opacity: .45;
+  }
+  65%, 100% {
+    left: 125%;
+    opacity: 0;
+  }
 }
 
-.brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  flex-shrink: 0;
-  font-size: 17px;
-  font-weight: 750;
-  letter-spacing: 3px;
-  position: relative;
-  z-index: 2;
-}
-
+/* ASTRA liquid-glass orb */
 .brand-orb {
   width: 31px;
   height: 31px;
+  flex-shrink: 0;
   position: relative;
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 28%, #fff, #a6c9ff 23%, #6676c9 55%, #171c37 80%);
-  box-shadow: 0 0 20px rgba(131,174,255,.36), inset 0 1px 4px rgba(255,255,255,.8);
+
+  background:
+    radial-gradient(
+      circle at 29% 20%,
+      #ffffff 0%,
+      rgba(255,255,255,.95) 4%,
+      rgba(208,229,255,.8) 13%,
+      rgba(128,164,242,.55) 31%,
+      rgba(81,99,176,.4) 54%,
+      rgba(16,24,49,.78) 78%
+    );
+
+  border: 1px solid rgba(255,255,255,.47);
+
+  box-shadow:
+    inset 0 1.5px 2px rgba(255,255,255,.8),
+    inset -5px -6px 9px rgba(0,0,0,.27),
+    0 0 18px rgba(151,190,255,.23);
 }
 
 .brand-orb::after {
@@ -289,15 +363,28 @@ button {
   position: absolute;
   inset: -4px;
   border-radius: 50%;
-  border: 1px solid rgba(175,204,255,.26);
+  border: 1px solid rgba(203,224,255,.42);
+  box-shadow: 0 0 10px rgba(148,184,255,.14);
   animation: orbPulse 4s ease-in-out infinite;
 }
 
-@keyframes orbPulse {
-  0%,100% { transform: scale(1); opacity: .5; }
-  50% { transform: scale(1.14); opacity: 1; }
+/* ASTRA name */
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+
+  font-size: 17px;
+  font-weight: 750;
+  letter-spacing: 3px;
+  color: rgba(255,255,255,.96);
+  text-shadow: 0 1px 8px rgba(255,255,255,.12);
 }
 
+/* Links stay subtle */
 .nav-links {
   display: flex;
   align-items: center;
@@ -306,49 +393,100 @@ button {
 }
 
 .nav-links a {
-  color: rgba(239,242,255,.69);
+  color: rgba(255,255,255,.77);
   font-size: 12px;
   font-weight: 500;
-  transition: color .25s;
+  transition: color .25s, text-shadow .25s;
 }
 
 .nav-links a:hover {
   color: white;
+  text-shadow: 0 0 14px rgba(255,255,255,.4);
 }
 
+/* Glass bubble download button */
 .nav-download {
   min-height: 43px;
   padding: 0 17px;
-  border-radius: 16px;
-  background: linear-gradient(130deg, rgba(255,255,255,.16), rgba(255,255,255,.055));
-  border: 1px solid rgba(255,255,255,.19);
-  font-size: 12px;
-  font-weight: 650;
+  border-radius: 17px;
+
   display: flex;
   align-items: center;
   gap: 10px;
+
+  color: white;
+  font-size: 12px;
+  font-weight: 650;
   white-space: nowrap;
   position: relative;
   z-index: 2;
-  transition: .3s;
+
+  background:
+    radial-gradient(
+      ellipse at 30% 0%,
+      rgba(255,255,255,.22),
+      transparent 65%
+    ),
+    rgba(255,255,255,.075);
+
+  border: 1px solid rgba(255,255,255,.29);
+
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,.30),
+    inset 0 -1px 1px rgba(255,255,255,.045),
+    0 3px 10px rgba(0,0,0,.08);
+
+  transition: transform .3s ease, background .3s ease;
 }
 
 .nav-download:hover {
-  background: rgba(180,205,255,.17);
-  box-shadow: 0 0 25px rgba(129,166,255,.13);
+  transform: translateY(-1px);
+  background: rgba(255,255,255,.16);
 }
 
-.menu-toggle {
-  display: none;
-  width: 42px;
-  height: 42px;
-  border-radius: 14px;
-  border: 1px solid var(--line);
-  background: rgba(255,255,255,.06);
-  color: white;
-  font-size: 21px;
-  cursor: pointer;
+/* Mobile glass bar */
+@media (max-width: 640px) {
+  .site-header {
+    padding-top: 9px;
+  }
+
+  .glass-nav {
+    width: calc(100% - 20px);
+    min-height: 59px;
+    padding: 7px 8px 7px 14px;
+    gap: 8px;
+    border-radius: 22px;
+
+    -webkit-backdrop-filter: blur(34px) saturate(220%) contrast(108%);
+    backdrop-filter: blur(34px) saturate(220%) contrast(108%);
+  }
+
+  .brand {
+    font-size: 15px;
+    letter-spacing: 2.5px;
+  }
+
+  .brand-orb {
+    width: 27px;
+    height: 27px;
+  }
+
+  .nav-download {
+    min-height: 39px;
+    padding: 0 12px;
+    border-radius: 15px;
+    font-size: 11px;
+    margin-left: auto;
+  }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .glass-nav::before,
+  .brand-orb::after {
+    animation: none;
+  }
+}
+
 
 /* =========================================
    HERO
